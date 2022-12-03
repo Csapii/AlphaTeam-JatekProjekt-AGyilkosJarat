@@ -11,7 +11,7 @@ namespace AlphaTeam_AGyilkosJarat
         static void Main(string[] args)
         {
 
-            Console.SetWindowSize(85, 20);
+            Console.SetWindowSize(80, 25);
 
             int wagon1_row = 7;
             int wagon1_col = 7;
@@ -22,7 +22,7 @@ namespace AlphaTeam_AGyilkosJarat
                 for (int j = 0; j < wagon1.GetLength(1); j++)
                 {
                     //middle path
-                    if (i == (wagon1_col - 1) / 2 && j > wagon1_col-wagon1_col)
+                    if (i == (wagon1_row - 1) / 2 && j > wagon1_col-wagon1_col)
                     {
                         Console.Write("-");
                         Console.Write("\t");
@@ -38,9 +38,9 @@ namespace AlphaTeam_AGyilkosJarat
                     else
                     {
                         //adding more '#' at exit side
-                        if ((i == (wagon1_row-2)/2 || i == (wagon1_row+1)/2) && j == wagon1_col-1)
+                        if ((i == ((wagon1_row - 1) / 2) - 1 || i == ((wagon1_row - 1) / 2) + 1) && j == wagon1_col-1)
                         {
-                            Console.Write("#####");
+                            Console.Write("#######");
                         }
                         else
                         {
@@ -53,8 +53,6 @@ namespace AlphaTeam_AGyilkosJarat
                 Console.WriteLine();
                 Console.WriteLine();
             }
-
-
 
         }
     }
