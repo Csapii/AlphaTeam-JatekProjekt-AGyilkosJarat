@@ -33,12 +33,44 @@ namespace AlphaTeam_AGyilkosJarat
             byte player_hp = 5;
 
             //coin
-            byte spawnable_coin_amount = 5;
+            byte spawnable_coin_amount = 3;
             int player_coin = 10;
             //generate coin pos
             int coin_position_x = random.Next(1, wagon1_col-1);
             int coin_position_y = random.Next(1, wagon1_row-1);
 
+
+            //generate enemies
+            //even number for size, every oddth value will represent 'y' and every eventh value will represent 'x'
+            int[] enemies_coordinates = new int[6]; //even number / 2 = enemies number
+            //enemies will only on chairs coordinates
+            for (int i = 0; i < enemies_coordinates.Length/2; i++)
+            {
+                //upper or lower side(0 = upper, 1 = lower)
+                int upper_or_lower_side = random.Next(0, 2);
+
+                int enemy_pos_y;
+                int enemy_pos_x;
+
+                if (upper_or_lower_side == 0)
+                {
+                    enemy_pos_y = random.Next(wagon1_row-wagon1_row+1, (wagon1_row-1)/2);
+                    enemies_coordinates[i] = enemy_pos_y;
+
+                    enemy_pos_x = random.Next(wagon1_col - wagon1_col+1, wagon1_col - 1);
+                    enemies_coordinates[i + 1] = enemy_pos_x;
+                }
+                else
+                {
+                    enemy_pos_y = random.Next(((wagon1_row - 1) / 2) + 1, wagon1_row-1);
+                    enemies_coordinates[i] = enemy_pos_y;
+
+                    enemy_pos_x = random.Next(wagon1_col - wagon1_col + 1, wagon1_col - 1);
+                    enemies_coordinates[i + 1] = enemy_pos_x;
+                }
+
+                Console.WriteLine($"enemy -> y: {enemy_pos_y} | x: {enemy_pos_x}");
+            }
 
             while (playing)
             {
@@ -46,6 +78,8 @@ namespace AlphaTeam_AGyilkosJarat
                 {
                     for (int j = 0; j < wagon1.GetLength(1); j++)
                     {
+
+
                         if ((coin_position_y == i && coin_position_x == j) && spawnable_coin_amount > 0)
                         {
                             Console.BackgroundColor = ConsoleColor.Yellow;
@@ -100,7 +134,7 @@ namespace AlphaTeam_AGyilkosJarat
                                 if (player_pos_y == coin_position_y && player_pos_x == coin_position_x)
                                 {
                                     Console.Beep();
-                                    player_coin += 10;
+                                    player_coin++;
                                     spawnable_coin_amount--;
                                     //the coin won't spawn in the same pos as the player
                                     coin_position_x = random.Next(1, wagon1_col - 1);
