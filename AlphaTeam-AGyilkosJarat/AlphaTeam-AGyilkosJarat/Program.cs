@@ -13,7 +13,7 @@ namespace AlphaTeam_AGyilkosJarat
 
 
         //Random string generator 
-        static void RandomString(string difficulty = "normal")
+        static string RandomString(string difficulty = "normal")
         {
 
             string characters = "qwertzuiopőúűáélkjhgfdsaíyxcvbnmQWERTZUIOPŐÚŰÁÉLKJHGFDSAÍYXCVBNM,.-?0123456789";
@@ -39,14 +39,11 @@ namespace AlphaTeam_AGyilkosJarat
             }
 
 
-
-            Console.WriteLine(randomString);
+            return randomString;
         }
 
         static void Main(string[] args)
         {
-
-            RandomString();
             
 
             //set window size
