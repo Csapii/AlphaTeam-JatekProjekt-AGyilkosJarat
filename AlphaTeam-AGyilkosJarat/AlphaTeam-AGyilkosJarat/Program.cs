@@ -9,10 +9,45 @@ namespace AlphaTeam_AGyilkosJarat
 {
     internal class Program
     {
+        static Random random = new Random();
+
+
+        //Random string generator 
+        static void RandomString(string difficulty = "normal")
+        {
+
+            string characters = "qwertzuiopőúűáélkjhgfdsaíyxcvbnmQWERTZUIOPŐÚŰÁÉLKJHGFDSAÍYXCVBNM,.-?0123456789";
+            string randomString = "";
+            int amount = 0;
+            if (difficulty == "normal")
+            {
+                amount = 10;
+            }
+            else if (difficulty == "easy")
+            {
+                amount = 5;
+            }
+            else if (difficulty == "hard")
+            {
+                amount = 20;
+            }
+
+            for (int i = 1; i <= amount; i++)
+            {
+
+                randomString = randomString.Insert(random.Next(randomString.Length),characters[random.Next(characters.Length - 1)].ToString());
+            }
+
+
+
+            Console.WriteLine(randomString);
+        }
+
         static void Main(string[] args)
         {
-            Random random = new Random();
 
+            RandomString();
+            
 
             //set window size
             Console.SetWindowSize(80, 25);
@@ -127,6 +162,7 @@ namespace AlphaTeam_AGyilkosJarat
                 Console.WriteLine("\n\n[1]-Fel\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
                 Console.Write("Válasz: ");
                 
+               
                 int player_move = int.Parse(Console.ReadLine());
 
                 //player moving (up, down, left, right)
@@ -176,6 +212,8 @@ namespace AlphaTeam_AGyilkosJarat
 
                 //clearing the old stuff
                 Console.Clear();
+
+
             }
             
 
