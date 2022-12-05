@@ -39,6 +39,7 @@ namespace AlphaTeam_AGyilkosJarat
             }
 
 
+
             return randomString;
         }
 
@@ -67,6 +68,8 @@ namespace AlphaTeam_AGyilkosJarat
             //generate enemies
             //even number for size, every oddth value will represent 'y' and every eventh value will represent 'x'
             int[] enemies_coordinates = new int[6]; //even number / 2 = enemies number
+            int remaining_enemies = 1; //now just one for the tutorial //enemies_coordinates.Length / 2;
+            int[] enemies_hp = new int[3];
             //enemies will only on chairs coordinates
             for (int i = 0; i < enemies_coordinates.Length/2; i++)
             {
@@ -93,7 +96,12 @@ namespace AlphaTeam_AGyilkosJarat
                     enemies_coordinates[i + 1] = enemy_pos_x;
                 }
 
-                Console.WriteLine($"enemy -> y: {enemy_pos_y} | x: {enemy_pos_x}");
+                if (i<3)
+                {
+                    int random_hp_for_enemy = random.Next(1, 4);
+                    enemies_hp[i] = random_hp_for_enemy;
+                }
+
             }
 
             while (playing)
@@ -122,8 +130,21 @@ namespace AlphaTeam_AGyilkosJarat
                             //chairs
                             else if ((i > wagon1_row - wagon1_row && i < wagon1_row - 1) && (j < wagon1_col - 1 && j > wagon1_col - wagon1_col))
                             {
-                                Console.Write("L");
-                                Console.Write("\t");
+                                int cnt_for_enemy_coordinates = 0;
+                                if (enemies_coordinates[cnt_for_enemy_coordinates] == i && enemies_coordinates[cnt_for_enemy_coordinates+1] == j)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write("!");
+                                    Console.ResetColor();
+                                    Console.Write("\t");
+                                }
+                                else
+                                {
+
+                                    Console.Write("L");
+                                    Console.Write("\t");
+                                }
+
                             }
                             //around
                             else
@@ -154,13 +175,107 @@ namespace AlphaTeam_AGyilkosJarat
                 Console.Write($"{string.Concat(Enumerable.Repeat($"{heart_emoji}", player_hp))}");
                 Console.ResetColor();
 
+                Console.WriteLine($"\tHátralévő ellenfelek: {remaining_enemies}");
 
 
-                Console.WriteLine("\n\n[1]-Fel\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
-                Console.Write("Válasz: ");
-                
-               
+                if (player_pos_y == enemies_coordinates[0] && player_pos_x == enemies_coordinates[1])
+                {
+                    Console.WriteLine("\n\n[1]-Fel\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n[7]-Harc\n\n[8]-Kilépés\n");
+                    Console.Write("Válasz: ");
+                }
+                else
+                {
+                    Console.WriteLine("\n\n[1]-Fel\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
+                    Console.Write("Válasz: ");
+
+                }
+
                 int player_move = int.Parse(Console.ReadLine());
+
+                //fight with enemies
+                if (player_move == 7 && (player_pos_y == enemies_coordinates[0] && player_pos_x == enemies_coordinates[1]))
+                {
+                    bool fighting_last_prompt = true;
+                    while (fighting_last_prompt)
+                    {
+                        Console.WriteLine($"Üdvözöllek a harcrendszer bemutatásában !");
+                        Console.WriteLine($"Jelenleg nincsen semmilyen fegyvered amit használni tudnál, szóval csak verekedni tudsz.");
+                        Console.WriteLine($"Ha jól írod be a megadott szöveget, akkor sikeresen támadtál, ellenkező esetben életet fogsz veszíteni.");
+
+                        Console.WriteLine($"Biztosan harcolni szeretnél?\n[1]-Igen\n[2]-Nem");
+                        Console.Write("Válasz: ");
+                        int fight_or_not = int.Parse(Console.ReadLine());
+
+                        if (fight_or_not == 1)
+                        {
+                            bool active_fight = true;
+                            byte enemy_hp = (byte)enemies_hp[0];
+                            while (active_fight)
+                            {
+                                string random_string_for_attack = RandomString(difficulty:"easy").Trim();
+                                Console.WriteLine($"Beírandó szöveg: {random_string_for_attack}");
+                                Console.Write($"Életerőd: ");
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.Write($"{string.Concat(Enumerable.Repeat($"{heart_emoji}", player_hp))}\t");
+                                Console.ResetColor();
+                                Console.Write($"Ellenfél életerő: ");
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.Write($"{string.Concat(Enumerable.Repeat($"{heart_emoji}", enemy_hp))}\n");
+                                Console.ResetColor();
+
+                                Console.Write("Támadás: ");
+                                string attack_string_user_input = Console.ReadLine().Trim(); //removing extra spaces
+
+                                if (attack_string_user_input == random_string_for_attack)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("SIKERES TÁMADÁS!");
+                                    Console.ResetColor();
+                                    enemy_hp--;
+                                    if (enemy_hp == 0)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        Console.WriteLine("Sikeresen legyőzted az ellenfeledet !");
+                                        Console.ResetColor();
+                                        Console.WriteLine("Jutalmak: "); //TODO
+                                        Console.WriteLine("Nyomj meg egy gombot a továbblépéshez!");
+                                        Console.ReadKey();
+                                        active_fight = false;
+                                        fighting_last_prompt = false;
+                                        remaining_enemies--;
+                                        //TODOs
+                                        //Remove died enemies from array
+                                        //temp 'removing' (not proper)
+                                        enemies_coordinates[0] = 0;
+                                        enemies_coordinates[1] = 0;
+
+
+                                        //Rewards
+                                        //Code comments
+                                        //Print out the next enemy
+                                    }
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("SIKERTELEN TÁMADÁS!");
+                                    Console.ResetColor();
+                                    player_hp--;
+                                    //TODOs
+                                    //Player died
+                                    //restart the whole game or quit(?)
+                                }
+
+
+                            }
+                        }
+                        else
+                        { 
+                            fighting_last_prompt = false;
+                        }
+                    }
+                }
+
 
                 //player moving (up, down, left, right)
                 //player can't go through the "walls"
