@@ -68,10 +68,12 @@ namespace AlphaTeam_AGyilkosJarat
             //generate enemies
             //even number for size, every oddth value will represent 'y' and every eventh value will represent 'x'
             int[] enemies_coordinates = new int[6]; //even number / 2 = enemies number
-            int remaining_enemies = 1; //now just one for the tutorial //enemies_coordinates.Length / 2;
+            int remaining_enemies = enemies_coordinates.Length/2;
             int[] enemies_hp = new int[3];
+            int cnt_for_enemy_coordinates = 0;
+            int cnt_for_enemy_hp = 0;
             //enemies will only on chairs coordinates
-            for (int i = 0; i < enemies_coordinates.Length/2; i++)
+            for (int i = 0; i < enemies_coordinates.Length-1; i++)
             {
                 //upper or lower side(0 = upper, 1 = lower)
                 int upper_or_lower_side = random.Next(0, 2);
@@ -130,7 +132,7 @@ namespace AlphaTeam_AGyilkosJarat
                             //chairs
                             else if ((i > wagon1_row - wagon1_row && i < wagon1_row - 1) && (j < wagon1_col - 1 && j > wagon1_col - wagon1_col))
                             {
-                                int cnt_for_enemy_coordinates = 0;
+                                
                                 if (enemies_coordinates[cnt_for_enemy_coordinates] == i && enemies_coordinates[cnt_for_enemy_coordinates+1] == j)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
@@ -178,9 +180,10 @@ namespace AlphaTeam_AGyilkosJarat
                 Console.WriteLine($"\tHátralévő ellenfelek: {remaining_enemies}");
 
 
-                if (player_pos_y == enemies_coordinates[0] && player_pos_x == enemies_coordinates[1])
+
+                if (player_pos_y == enemies_coordinates[cnt_for_enemy_coordinates] && player_pos_x == enemies_coordinates[cnt_for_enemy_coordinates+1])
                 {
-                    Console.WriteLine("\n\n[1]-Fel\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n[7]-Harc\n\n[8]-Kilépés\n");
+                    Console.WriteLine("\n\n[1]-Fel\t\t[7]-Harc\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
                     Console.Write("Válasz: ");
                 }
                 else
@@ -193,8 +196,9 @@ namespace AlphaTeam_AGyilkosJarat
                 int player_move = int.Parse(Console.ReadLine());
 
                 //fight with enemies
-                if (player_move == 7 && (player_pos_y == enemies_coordinates[0] && player_pos_x == enemies_coordinates[1]))
+                if (player_move == 7 && (player_pos_y == enemies_coordinates[cnt_for_enemy_coordinates] && player_pos_x == enemies_coordinates[cnt_for_enemy_coordinates+1]))
                 {
+                    Console.Clear();
                     bool fighting_last_prompt = true;
                     while (fighting_last_prompt)
                     {
@@ -202,14 +206,15 @@ namespace AlphaTeam_AGyilkosJarat
                         Console.WriteLine($"Jelenleg nincsen semmilyen fegyvered amit használni tudnál, szóval csak verekedni tudsz.");
                         Console.WriteLine($"Ha jól írod be a megadott szöveget, akkor sikeresen támadtál, ellenkező esetben életet fogsz veszíteni.");
 
-                        Console.WriteLine($"Biztosan harcolni szeretnél?\n[1]-Igen\n[2]-Nem");
+                        Console.WriteLine($"Biztosan harcolni szeretnél?\n[1]-Igen\t[2]-Nem");
                         Console.Write("Válasz: ");
                         int fight_or_not = int.Parse(Console.ReadLine());
 
                         if (fight_or_not == 1)
                         {
+                            Console.Clear();
                             bool active_fight = true;
-                            byte enemy_hp = (byte)enemies_hp[0];
+                            byte enemy_hp = (byte)enemies_hp[cnt_for_enemy_hp];
                             while (active_fight)
                             {
                                 string random_string_for_attack = RandomString(difficulty:"easy").Trim();
@@ -243,6 +248,16 @@ namespace AlphaTeam_AGyilkosJarat
                                         active_fight = false;
                                         fighting_last_prompt = false;
                                         remaining_enemies--;
+                                        if (remaining_enemies != 0)
+                                        {
+                                            cnt_for_enemy_coordinates += 2;
+                                        }
+                                        else
+                                        {
+                                            cnt_for_enemy_coordinates = 0; //need to remove coordinates for this line
+                                        }
+                                        
+                                        cnt_for_enemy_hp++;
                                         //TODOs
                                         //Remove died enemies from array
                                         //temp 'removing' (not proper)
