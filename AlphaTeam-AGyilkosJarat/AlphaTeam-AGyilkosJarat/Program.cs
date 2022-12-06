@@ -16,7 +16,7 @@ namespace AlphaTeam_AGyilkosJarat
         static string RandomString(string difficulty = "normal")
         {
 
-            string characters = "qwertzuiopőúűáélkjhgfdsaíyxcvbnmQWERTZUIOPŐÚŰÁÉLKJHGFDSAÍYXCVBNM,.-?0123456789";
+            string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>#&@?%-.";
             string randomString = "";
             int amount = 0;
             if (difficulty == "normal")
