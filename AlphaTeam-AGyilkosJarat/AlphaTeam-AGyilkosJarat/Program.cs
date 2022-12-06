@@ -261,6 +261,19 @@ namespace AlphaTeam_AGyilkosJarat
                                     Console.WriteLine("SIKERTELEN TÁMADÁS!");
                                     Console.ResetColor();
                                     player_hp--;
+                                    if (player_hp == 0)
+                                    {
+                                        Console.Clear();
+                                        Console.ForegroundColor= ConsoleColor.Red;
+                                        Console.WriteLine("SAJNOS EZ A HARC NEM SIKERÜLT, MEGHALTÁL!");
+                                        Console.ResetColor();
+                                        Console.WriteLine("Vége a játéknak...");
+                                        Console.Write("Nyomj meg egy gombot a kilépéshez.");
+                                        Console.ReadKey();
+                                        fighting_last_prompt=false;
+                                        active_fight=false;
+                                        playing = false;
+                                    }
                                     //TODOs
                                     //Player died
                                     //restart the whole game or quit(?)
