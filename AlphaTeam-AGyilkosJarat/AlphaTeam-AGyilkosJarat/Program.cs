@@ -106,6 +106,15 @@ namespace AlphaTeam_AGyilkosJarat
 
             }
 
+            //Neumann
+            int neumann_money = random.Next(500, 1001);
+            int neumann_appear_or_not = random.Next(0, 2); // 1 - yes; 0 - no ; only once / game
+            int neumann_pos_y = (wagon1_row - 1) / 2;//exit side y
+            int neumann_pos_x = wagon1_col - 1; //exit side x
+
+            int player_money = 0;
+
+
             while (playing)
             {
                 for (int i = 0; i < wagon1.GetLength(0); i++)
@@ -125,8 +134,19 @@ namespace AlphaTeam_AGyilkosJarat
                             //middle path
                             if (i == (wagon1_row - 1) / 2 && j > wagon1_col - wagon1_col)
                             {
-                                Console.Write("-");
-                                Console.Write("\t");
+                                if ((i == neumann_pos_y && j == neumann_pos_x) && remaining_enemies == 0 && neumann_appear_or_not == 1)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write("?");
+                                    Console.ResetColor();
+                                    Console.Write("\t");
+                                }
+                                else
+                                {
+                                    Console.Write("-");
+                                    Console.Write("\t");
+
+                                }
 
                             }
                             //chairs
@@ -177,13 +197,24 @@ namespace AlphaTeam_AGyilkosJarat
                 Console.Write($"{string.Concat(Enumerable.Repeat($"{heart_emoji}", player_hp))}");
                 Console.ResetColor();
 
-                Console.WriteLine($"\tHátralévő ellenfelek: {remaining_enemies}");
+                //displaying player's money
+                Console.Write($"\tHátralévő ellenfelek: {remaining_enemies}");
+                Console.Write($"\t\tPénz: ");
+                Console.ForegroundColor= ConsoleColor.Green;
+                Console.Write("$");
+                Console.ResetColor();
+                Console.Write($"{player_money}");
 
 
 
                 if (player_pos_y == enemies_coordinates[cnt_for_enemy_coordinates] && player_pos_x == enemies_coordinates[cnt_for_enemy_coordinates+1])
                 {
                     Console.WriteLine("\n\n[1]-Fel\t\t[7]-Harc\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
+                    Console.Write("Válasz: ");
+                }
+                else if (player_pos_y == neumann_pos_y && player_pos_x == neumann_pos_x)
+                {
+                    Console.WriteLine("\n\n[1]-Fel\t\t[7]-Beszélgetés Neumann János-val/vel\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
                     Console.Write("Válasz: ");
                 }
                 else
@@ -303,7 +334,54 @@ namespace AlphaTeam_AGyilkosJarat
                         }
                     }
                 }
+                //Neumann things
+                if (player_move == 7 && (player_pos_y == neumann_pos_y && player_pos_x == neumann_pos_x))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Most személyesen \"beszélhetsz\" Neumann János-val/vel.");
+                    Console.WriteLine("Ha megtudod fejteni, hogy mit mond, akkor egy kisebb nyeremény fogad, de vigyázz, mert csak 1 esélyed van!");
 
+                    bool talk_with_neumann = true;
+                    while (talk_with_neumann)
+                    {
+                        Console.Write("Neumann János: ");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("01000001 01101010 01100001 01101110 01100100 01100101 01101011");
+                        Console.ResetColor();
+                        Console.WriteLine();
+
+
+                        Console.Write("Megfejtés: ");
+                        string neumann_binary_to_text = Console.ReadLine();
+
+                        if (neumann_binary_to_text.Trim() == "Ajandek")
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("Gratulálunk, sikeresen megfejtetted az üzenetet !");
+                            Console.Write($"Nyereményed: ");
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("$");
+                            Console.ResetColor();
+                            Console.Write($"{neumann_money}");
+                            neumann_appear_or_not = 0;
+                            Console.WriteLine();
+                            Console.WriteLine("Nyomj meg egy gombot a továbblépéshez!");
+                            Console.ReadKey();
+                            talk_with_neumann = false;
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("Sajnos helytelen a válaszod:(");
+                            Console.WriteLine("Több szerencsét legközelebb!");
+                            neumann_appear_or_not = 0;
+                            Console.WriteLine("Nyomj meg egy gombot a továbblépéshez!");
+                            Console.ReadKey();
+                            talk_with_neumann = false;
+                        }
+
+                    }
+                }
 
                 //player moving (up, down, left, right)
                 //player can't go through the "walls"
