@@ -212,7 +212,7 @@ namespace AlphaTeam_AGyilkosJarat
                     Console.WriteLine("\n\n[1]-Fel\t\t[7]-Harc\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
                     Console.Write("Válasz: ");
                 }
-                else if (player_pos_y == neumann_pos_y && player_pos_x == neumann_pos_x)
+                else if ((player_pos_y == neumann_pos_y && player_pos_x == neumann_pos_x) && (neumann_appear_or_not == 1 && remaining_enemies == 0))
                 {
                     Console.WriteLine("\n\n[1]-Fel\t\t[7]-Beszélgetés Neumann János-val/vel\n[2]-Le\n[3]-Jobbra\n[4]-Balra\n\n[8]-Kilépés\n");
                     Console.Write("Válasz: ");
@@ -356,6 +356,7 @@ namespace AlphaTeam_AGyilkosJarat
 
                         if (neumann_binary_to_text.Trim() == "Ajandek")
                         {
+                            player_money = neumann_money;
                             Console.WriteLine();
                             Console.WriteLine("Gratulálunk, sikeresen megfejtetted az üzenetet !");
                             Console.Write($"Nyereményed: ");
